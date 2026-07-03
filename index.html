@@ -1,0 +1,847 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wiki de Procedimientos Internos - IPAP</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        /* Ajustes finos de UX para scrollbar y transiciones */
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+        .procedure-card {
+            transition: all 0.2s ease-in-out;
+        }
+        .accordion-content {
+            transition: max-height 0.3s ease-out;
+            max-height: 0;
+            overflow: hidden;
+        }
+        .accordion-content.open {
+            max-height: 1000px;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans flex flex-col h-screen overflow-hidden">
+
+    <header class="bg-[#0f172a] text-white h-16 min-h-16 px-6 flex items-center justify-between shadow-md border-b border-slate-700 z-20">
+        <div class="flex items-center gap-3">
+            <div class="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center font-bold text-lg tracking-wider text-white shadow-inner">
+                IPAP
+            </div>
+            <div>
+                <h1 class="text-lg font-bold tracking-tight leading-tight">Wiki de Procedimientos</h1>
+                <p class="text-xs text-slate-400 hidden sm:block">Plataforma de Consulta Rápida Administrativa y Docente</p>
+            </div>
+        </div>
+        <div class="flex items-center gap-4">
+            <div class="relative w-64 md:w-80">
+                <i data-lucide="search" class="absolute left-3 top-2.5 h-4 w-4 text-slate-400"></i>
+                <input type="text" id="globalSearch" placeholder="¿Qué procedimiento buscás?..." 
+                       class="w-full bg-slate-800 text-slate-200 pl-9 pr-4 py-1.5 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-orange-500 border border-slate-700 placeholder-slate-400">
+            </div>
+        </div>
+    </header>
+
+    <div class="flex flex-1 overflow-hidden relative">
+
+        <aside class="w-72 bg-white border-r border-slate-200 flex flex-col h-full z-10 shadow-sm">
+            <div class="p-4 border-b border-slate-100 bg-slate-50/50">
+                <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Navegación por Categorías</p>
+            </div>
+            <nav class="flex-1 overflow-y-auto p-3 space-y-2 custom-scrollbar" id="sidebarMenu">
+                <div class="category-group" data-cat="gestion-personas">
+                    <button onclick="filterByCategory('gestion-personas')" class="w-full flex items-center justify-between p-2.5 rounded-lg text-sm font-medium text-slate-700 hover:bg-slate-100 transition-colors group active-nav">
+                        <div class="flex items-center gap-2.5">
+                            <i data-lucide="users" class="h-4 w-4 text-blue-600"></i>
+                            <span>Gestión de Personas</span>
+                        </div>
+                        <span class="bg-slate-100 text-slate-600 text-xs px-2 py-0.5 rounded-full font-bold group-hover:bg-white border border-slate-200">4</span>
+                    </button>
+                </div>
+                <div class="category-group" data-cat="vinculacion-siu-moodle">
+                    <button onclick="filterByCategory('vinculacion-siu-moodle')" class="w-full flex items-center justify-between p-2.5 rounded-lg text-sm font-medium text-slate-700 hover:bg-slate-100 transition-colors group">
+                        <div class="flex items-center gap-2.5">
+                            <i data-lucide="link" class="h-4 w-4 text-indigo-600"></i>
+                            <span>Vinculación SIU-Moodle</span>
+                        </div>
+                        <span class="bg-slate-100 text-slate-600 text-xs px-2 py-0.5 rounded-full font-bold group-hover:bg-white border border-slate-200">3</span>
+                    </button>
+                </div>
+                <div class="category-group" data-cat="actas">
+                    <button onclick="filterByCategory('actas')" class="w-full flex items-center justify-between p-2.5 rounded-lg text-sm font-medium text-slate-700 hover:bg-slate-100 transition-colors group">
+                        <div class="flex items-center gap-2.5">
+                            <i data-lucide="file-text" class="h-4 w-4 text-emerald-600"></i>
+                            <span>Actas</span>
+                        </div>
+                        <span class="bg-slate-100 text-slate-600 text-xs px-2 py-0.5 rounded-full font-bold group-hover:bg-white border border-slate-200">4</span>
+                    </button>
+                </div>
+                <div class="category-group" data-cat="contrasenas">
+                    <button onclick="filterByCategory('contrasenas')" class="w-full flex items-center justify-between p-2.5 rounded-lg text-sm font-medium text-slate-700 hover:bg-slate-100 transition-colors group">
+                        <div class="flex items-center gap-2.5">
+                            <i data-lucide="lock" class="h-4 w-4 text-amber-600"></i>
+                            <span>Contraseñas</span>
+                        </div>
+                        <span class="bg-slate-100 text-slate-600 text-xs px-2 py-0.5 rounded-full font-bold group-hover:bg-white border border-slate-200">2</span>
+                    </button>
+                </div>
+                <div class="category-group" data-cat="mesas-examen">
+                    <button onclick="filterByCategory('mesas-examen')" class="w-full flex items-center justify-between p-2.5 rounded-lg text-sm font-medium text-slate-700 hover:bg-slate-100 transition-colors group">
+                        <div class="flex items-center gap-2.5">
+                            <i data-lucide="calendar" class="h-4 w-4 text-purple-600"></i>
+                            <span>Mesas de Examen</span>
+                        </div>
+                        <span class="bg-slate-100 text-slate-600 text-xs px-2 py-0.5 rounded-full font-bold group-hover:bg-white border border-slate-200">3</span>
+                    </button>
+                </div>
+                <div class="category-group" data-cat="comisiones-inscripciones">
+                    <button onclick="filterByCategory('comisiones-inscripciones')" class="w-full flex items-center justify-between p-2.5 rounded-lg text-sm font-medium text-slate-700 hover:bg-slate-100 transition-colors group">
+                        <div class="flex items-center gap-2.5">
+                            <i data-lucide="clipboard-list" class="h-4 w-4 text-rose-600"></i>
+                            <span>Comisiones e Inscrip.</span>
+                        </div>
+                        <span class="bg-slate-100 text-slate-600 text-xs px-2 py-0.5 rounded-full font-bold group-hover:bg-white border border-slate-200">5</span>
+                    </button>
+                </div>
+                
+                <hr class="border-slate-200 my-4">
+                
+                <button onclick="clearFilters()" class="w-full flex items-center justify-center gap-2 text-xs font-semibold py-2 px-3 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-lg transition-colors">
+                    <i data-lucide="refresh-cw" class="h-3 w-3"></i> Mostrar Todo
+                </button>
+            </nav>
+        </aside>
+
+        <main class="flex-1 overflow-y-auto p-6 md:p-8 custom-scrollbar" id="proceduresContainer">
+            <div id="noResults" class="hidden text-center py-12">
+                <i data-lucide="alert-circle" class="h-12 w-12 text-slate-300 mx-auto mb-3"></i>
+                <p class="text-slate-500 font-medium">No se encontraron procedimientos que coincidan con la búsqueda.</p>
+            </div>
+
+            <div class="grid grid-cols-1 xl:grid-cols-2 gap-6" id="cardsGrid">
+                
+                <article class="procedure-card bg-white rounded-xl shadow-sm border border-slate-200 p-5 flex flex-col justify-between" data-category="gestion-personas">
+                    <div>
+                        <div class="flex items-start justify-between gap-4 mb-3">
+                            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-blue-50 text-blue-700 border border-blue-200">
+                                <i data-lucide="users" class="h-3 w-3"></i> Gestión de Personas
+                            </span>
+                        </div>
+                        <h3 class="text-base font-bold text-slate-900 mb-1">Creación de persona en SIU</h3>
+                        <p class="text-xs text-slate-500 mb-4">Alta de nuevos usuarios administrativos, docentes o alumnos en la base central del sistema.</p>
+                        
+                        <div class="border border-slate-100 rounded-lg overflow-hidden mb-4">
+                            <button onclick="toggleAccordion(this)" class="w-full flex items-center justify-between p-3 bg-slate-50 hover:bg-slate-100/80 text-left text-xs font-semibold text-slate-700 transition-colors">
+                                <span>Ver pasos del procedimiento</span>
+                                <i data-lucide="chevron-down" class="h-4 w-4 transform transition-transform duration-200"></i>
+                            </button>
+                            <div class="accordion-content bg-white px-4">
+                                <ol class="list-decimal list-inside text-xs text-slate-600 space-y-2 py-3 border-t border-slate-100">
+                                    <li>Ingresar al módulo de Matrícula o Gestión de Personas en SIU-Guaraní.</li>
+                                    <li>Hacer clic en 'Agregar Nueva Persona' e ingresar el Tipo y Número de Documento.</li>
+                                    <li>Completar Datos Básicos (Nombre, Apellido, Fecha de Nacimiento y Sexo legal).</li>
+                                    <li>Guardar cambios y verificar la generación del identificador interno único.</li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+                    <a href="URL_VIDEO_AQUI" target="_blank" class="w-full flex items-center justify-center gap-2 bg-orange-500 hover:bg-orange-600 text-white font-semibold text-xs py-2.5 px-4 rounded-lg shadow-sm transition-colors mt-auto">
+                        <i data-lucide="play-circle" class="h-4 w-4"></i> Ver video tutorial
+                    </a>
+                </article>
+
+                <article class="procedure-card bg-white rounded-xl shadow-sm border border-slate-200 p-5 flex flex-col justify-between" data-category="gestion-personas">
+                    <div>
+                        <div class="flex items-start justify-between gap-4 mb-3">
+                            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-blue-50 text-blue-700 border border-blue-200">
+                                <i data-lucide="users" class="h-3 w-3"></i> Gestión de Personas
+                            </span>
+                        </div>
+                        <h3 class="text-base font-bold text-slate-900 mb-1">Actualizar datos de persona en SIU</h3>
+                        <p class="text-xs text-slate-500 mb-4">Modificación de información de contacto, domicilio o datos civiles a solicitud del interesado.</p>
+                        
+                        <div class="border border-slate-100 rounded-lg overflow-hidden mb-4">
+                            <button onclick="toggleAccordion(this)" class="w-full flex items-center justify-between p-3 bg-slate-50 hover:bg-slate-100/80 text-left text-xs font-semibold text-slate-700 transition-colors">
+                                <span>Ver pasos del procedimiento</span>
+                                <i data-lucide="chevron-down" class="h-4 w-4 transform transition-transform duration-200"></i>
+                            </button>
+                            <div class="accordion-content bg-white px-4">
+                                <ol class="list-decimal list-inside text-xs text-slate-600 space-y-2 py-3 border-t border-slate-100">
+                                    <li>Buscar a la persona mediante el filtro por documento o apellido.</li>
+                                    <li>Hacer clic en editar y seleccionar la pestaña correspondiente (Contacto/Domicilio).</li>
+                                    <li>Modificar los campos validados (Email institucional, teléfono, etc.).</li>
+                                    <li>Presionar 'Guardar' y corroborar que impacte en la ficha unificada.</li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+                    <a href="URL_VIDEO_AQUI" target="_blank" class="w-full flex items-center justify-center gap-2 bg-orange-500 hover:bg-orange-600 text-white font-semibold text-xs py-2.5 px-4 rounded-lg shadow-sm transition-colors mt-auto">
+                        <i data-lucide="play-circle" class="h-4 w-4"></i> Ver video tutorial
+                    </a>
+                </article>
+
+                <article class="procedure-card bg-white rounded-xl shadow-sm border border-slate-200 p-5 flex flex-col justify-between" data-category="gestion-personas">
+                    <div>
+                        <div class="flex items-start justify-between gap-4 mb-3">
+                            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-blue-50 text-blue-700 border border-blue-200">
+                                <i data-lucide="users" class="h-3 w-3"></i> Gestión de Personas
+                            </span>
+                        </div>
+                        <h3 class="text-base font-bold text-slate-900 mb-1">Controlar Ficha de Personas</h3>
+                        <p class="text-xs text-slate-500 mb-4">Auditoría visual e informática del legajo digitalizado para detectar datos faltantes o inconsistencias.</p>
+                        
+                        <div class="border border-slate-100 rounded-lg overflow-hidden mb-4">
+                            <button onclick="toggleAccordion(this)" class="w-full flex items-center justify-between p-3 bg-slate-50 hover:bg-slate-100/80 text-left text-xs font-semibold text-slate-700 transition-colors">
+                                <span>Ver pasos del procedimiento</span>
+                                <i data-lucide="chevron-down" class="h-4 w-4 transform transition-transform duration-200"></i>
+                            </button>
+                            <div class="accordion-content bg-white px-4">
+                                <ol class="list-decimal list-inside text-xs text-slate-600 space-y-2 py-3 border-t border-slate-100">
+                                    <li>Acceder al reporte consolidado 'Ficha de la Persona'.</li>
+                                    <li>Revisar pestañas de Propuestas Vinculadas, Requisitos Presentados e Historial.</li>
+                                    <li>En caso de detectar campos vacíos obligatorios, marcar para revisión o aviso automático.</li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+                    <a href="URL_VIDEO_AQUI" target="_blank" class="w-full flex items-center justify-center gap-2 bg-orange-500 hover:bg-orange-600 text-white font-semibold text-xs py-2.5 px-4 rounded-lg shadow-sm transition-colors mt-auto">
+                        <i data-lucide="play-circle" class="h-4 w-4"></i> Ver video tutorial
+                    </a>
+                </article>
+
+                <article class="procedure-card bg-white rounded-xl shadow-sm border border-slate-200 p-5 flex flex-col justify-between" data-category="gestion-personas">
+                    <div>
+                        <div class="flex items-start justify-between gap-4 mb-3">
+                            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-blue-50 text-blue-700 border border-blue-200">
+                                <i data-lucide="users" class="h-3 w-3"></i> Gestión de Personas
+                            </span>
+                        </div>
+                        <h3 class="text-base font-bold text-slate-900 mb-1">Matricular Docente en SIU</h3>
+                        <p class="text-xs text-slate-500 mb-4">Asignación del rol docente a una persona existente en el sistema para permitir su vinculación a cátedras.</p>
+                        
+                        <div class="border border-slate-100 rounded-lg overflow-hidden mb-4">
+                            <button onclick="toggleAccordion(this)" class="w-full flex items-center justify-between p-3 bg-slate-50 hover:bg-slate-100/80 text-left text-xs font-semibold text-slate-700 transition-colors">
+                                <span>Ver pasos del procedimiento</span>
+                                <i data-lucide="chevron-down" class="h-4 w-4 transform transition-transform duration-200"></i>
+                            </button>
+                            <div class="accordion-content bg-white px-4">
+                                <ol class="list-decimal list-inside text-xs text-slate-600 space-y-2 py-3 border-t border-slate-100">
+                                    <li>Ingresar a la operación 'Administrar Docentes'.</li>
+                                    <li>Buscar la persona por DNI y presionar 'Dar Alta como Docente'.</li>
+                                    <li>Asignar Legajo Docente y asociar al departamento académico correspondiente del IPAP.</li>
+                                    <li>Confirmar la operación.</li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+                    <a href="URL_VIDEO_AQUI" target="_blank" class="w-full flex items-center justify-center gap-2 bg-orange-500 hover:bg-orange-600 text-white font-semibold text-xs py-2.5 px-4 rounded-lg shadow-sm transition-colors mt-auto">
+                        <i data-lucide="play-circle" class="h-4 w-4"></i> Ver video tutorial
+                    </a>
+                </article>
+
+                <article class="procedure-card bg-white rounded-xl shadow-sm border border-slate-200 p-5 flex flex-col justify-between" data-category="vinculacion-siu-moodle">
+                    <div>
+                        <div class="flex items-start justify-between gap-4 mb-3">
+                            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-indigo-50 text-indigo-700 border border-indigo-200">
+                                <i data-lucide="link" class="h-3 w-3"></i> Vinculación SIU-Moodle
+                            </span>
+                        </div>
+                        <h3 class="text-base font-bold text-slate-900 mb-1">Vinculación de usuario SIU-Moodle</h3>
+                        <p class="text-xs text-slate-500 mb-4">Sincronización de cuentas individuales entre plataformas mediante identificadores concurrentes.</p>
+                        
+                        <div class="border border-slate-100 rounded-lg overflow-hidden mb-4">
+                            <button onclick="toggleAccordion(this)" class="w-full flex items-center justify-between p-3 bg-slate-50 hover:bg-slate-100/80 text-left text-xs font-semibold text-slate-700 transition-colors">
+                                <span>Ver pasos del procedimiento</span>
+                                <i data-lucide="chevron-down" class="h-4 w-4 transform transition-transform duration-200"></i>
+                            </button>
+                            <div class="accordion-content bg-white px-4">
+                                <ol class="list-decimal list-inside text-xs text-slate-600 space-y-2 py-3 border-t border-slate-100">
+                                    <li>Ingresar al plugin de integración técnica en la administración del SIU.</li>
+                                    <li>Mapear el campo 'Username' de Moodle con el documento/CUIL del SIU.</li>
+                                    <li>Ejecutar la sincronización forzada o verificar el log de tareas programadas (cron).</li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+                    <a href="URL_VIDEO_AQUI" target="_blank" class="w-full flex items-center justify-center gap-2 bg-orange-500 hover:bg-orange-600 text-white font-semibold text-xs py-2.5 px-4 rounded-lg shadow-sm transition-colors mt-auto">
+                        <i data-lucide="play-circle" class="h-4 w-4"></i> Ver video tutorial
+                    </a>
+                </article>
+
+                <article class="procedure-card bg-white rounded-xl shadow-sm border border-slate-200 p-5 flex flex-col justify-between" data-category="vinculacion-siu-moodle">
+                    <div>
+                        <div class="flex items-start justify-between gap-4 mb-3">
+                            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-indigo-50 text-indigo-700 border border-indigo-200">
+                                <i data-lucide="link" class="h-3 w-3"></i> Vinculación SIU-Moodle
+                            </span>
+                        </div>
+                        <h3 class="text-base font-bold text-slate-900 mb-1">Vincular Mesa de Examen SIU con Mesa de Examen Moodle</h3>
+                        <p class="text-xs text-slate-500 mb-4">Enlace de un entorno evaluativo virtual con la correspondiente estructura administrativa del acta.</p>
+                        
+                        <div class="border border-slate-100 rounded-lg overflow-hidden mb-4">
+                            <button onclick="toggleAccordion(this)" class="w-full flex items-center justify-between p-3 bg-slate-50 hover:bg-slate-100/80 text-left text-xs font-semibold text-slate-700 transition-colors">
+                                <span>Ver pasos del procedimiento</span>
+                                <i data-lucide="chevron-down" class="h-4 w-4 transform transition-transform duration-200"></i>
+                            </button>
+                            <div class="accordion-content bg-white px-4">
+                                <ol class="list-decimal list-inside text-xs text-slate-600 space-y-2 py-3 border-t border-slate-100">
+                                    <li>Entrar al aula del examen en Moodle y copiar el ID del curso de la URL.</li>
+                                    <li>En SIU, ir a la configuración de la Mesa de Examen específica.</li>
+                                    <li>Pegar el ID en el campo 'Enlace a Entorno Virtual' y guardar para habilitar exportación automática de calificaciones.</li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+                    <a href="URL_VIDEO_AQUI" target="_blank" class="w-full flex items-center justify-center gap-2 bg-orange-500 hover:bg-orange-600 text-white font-semibold text-xs py-2.5 px-4 rounded-lg shadow-sm transition-colors mt-auto">
+                        <i data-lucide="play-circle" class="h-4 w-4"></i> Ver video tutorial
+                    </a>
+                </article>
+
+                <article class="procedure-card bg-white rounded-xl shadow-sm border border-slate-200 p-5 flex flex-col justify-between" data-category="vinculacion-siu-moodle">
+                    <div>
+                        <div class="flex items-start justify-between gap-4 mb-3">
+                            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-indigo-50 text-indigo-700 border border-indigo-200">
+                                <i data-lucide="link" class="h-3 w-3"></i> Vinculación SIU-Moodle
+                            </span>
+                        </div>
+                        <h3 class="text-base font-bold text-slate-900 mb-1">Agregar objetos repetidos en Aula Moodle</h3>
+                        <p class="text-xs text-slate-500 mb-4">Uso de herramientas de clonación masiva o plugins para replicar recursos didácticos o actividades estructurales.</p>
+                        
+                        <div class="border border-slate-100 rounded-lg overflow-hidden mb-4">
+                            <button onclick="toggleAccordion(this)" class="w-full flex items-center justify-between p-3 bg-slate-50 hover:bg-slate-100/80 text-left text-xs font-semibold text-slate-700 transition-colors">
+                                <span>Ver pasos del procedimiento</span>
+                                <i data-lucide="chevron-down" class="h-4 w-4 transform transition-transform duration-200"></i>
+                            </button>
+                            <div class="accordion-content bg-white px-4">
+                                <ol class="list-decimal list-inside text-xs text-slate-600 space-y-2 py-3 border-t border-slate-100">
+                                    <li>Activar el modo de edición dentro del aula Moodle objetivo.</li>
+                                    <li>Utilizar la funcionalidad 'Bulk Activity' o duplicación en lote de elementos requeridos.</li>
+                                    <li>Configurar restricciones y visibilidad de manera masiva en las secciones clonadas.</li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+                    <a href="URL_VIDEO_AQUI" target="_blank" class="w-full flex items-center justify-center gap-2 bg-orange-500 hover:bg-orange-600 text-white font-semibold text-xs py-2.5 px-4 rounded-lg shadow-sm transition-colors mt-auto">
+                        <i data-lucide="play-circle" class="h-4 w-4"></i> Ver video tutorial
+                    </a>
+                </article>
+
+                <article class="procedure-card bg-white rounded-xl shadow-sm border border-slate-200 p-5 flex flex-col justify-between" data-category="actas">
+                    <div>
+                        <div class="flex items-start justify-between gap-4 mb-3">
+                            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-emerald-50 text-emerald-700 border border-emerald-200">
+                                <i data-lucide="file-text" class="h-3 w-3"></i> Actas
+                            </span>
+                        </div>
+                        <h3 class="text-base font-bold text-slate-900 mb-1">Cerrar Acta Regulares SIU</h3>
+                        <p class="text-xs text-slate-500 mb-4">Proceso de cierre definitivo y foliado de actas de cursada regular, bloqueando futuras modificaciones.</p>
+                        
+                        <div class="border border-slate-100 rounded-lg overflow-hidden mb-4">
+                            <button onclick="toggleAccordion(this)" class="w-full flex items-center justify-between p-3 bg-slate-50 hover:bg-slate-100/80 text-left text-xs font-semibold text-slate-700 transition-colors">
+                                <span>Ver pasos del procedimiento</span>
+                                <i data-lucide="chevron-down" class="h-4 w-4 transform transition-transform duration-200"></i>
+                            </button>
+                            <div class="accordion-content bg-white px-4">
+                                <ol class="list-decimal list-inside text-xs text-slate-600 space-y-2 py-3 border-t border-slate-100">
+                                    <li>Ir a 'Exámenes' o 'Cursadas' -> 'Cerrar Actas de Regulares'.</li>
+                                    <li>Seleccionar el año académico, período de lectura y la comisión.</li>
+                                    <li>Controlar minuciosamente que cada alumno posea nota cargada y condición válida.</li>
+                                    <li>Hacer clic en 'Cerrar Acta' y guardar el archivo PDF del libro impreso si corresponde.</li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+                    <a href="URL_VIDEO_AQUI" target="_blank" class="w-full flex items-center justify-center gap-2 bg-orange-500 hover:bg-orange-600 text-white font-semibold text-xs py-2.5 px-4 rounded-lg shadow-sm transition-colors mt-auto">
+                        <i data-lucide="play-circle" class="h-4 w-4"></i> Ver video tutorial
+                    </a>
+                </article>
+
+                <article class="procedure-card bg-white rounded-xl shadow-sm border border-slate-200 p-5 flex flex-col justify-between" data-category="actas">
+                    <div>
+                        <div class="flex items-start justify-between gap-4 mb-3">
+                            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-emerald-50 text-emerald-700 border border-emerald-200">
+                                <i data-lucide="file-text" class="h-3 w-3"></i> Actas
+                            </span>
+                        </div>
+                        <h3 class="text-base font-bold text-slate-900 mb-1">Cerrar Acta Libres SIU</h3>
+                        <p class="text-xs text-slate-500 mb-4">Procedimiento de finalización y validación formal de actas de exámenes en condición de libre.</p>
+                        
+                        <div class="border border-slate-100 rounded-lg overflow-hidden mb-4">
+                            <button onclick="toggleAccordion(this)" class="w-full flex items-center justify-between p-3 bg-slate-50 hover:bg-slate-100/80 text-left text-xs font-semibold text-slate-700 transition-colors">
+                                <span>Ver pasos del procedimiento</span>
+                                <i data-lucide="chevron-down" class="h-4 w-4 transform transition-transform duration-200"></i>
+                            </button>
+                            <div class="accordion-content bg-white px-4">
+                                <ol class="list-decimal list-inside text-xs text-slate-600 space-y-2 py-3 border-t border-slate-100">
+                                    <li>Ingresar al apartado específico de Cierre de Actas de Examen -> Libres.</li>
+                                    <li>Verificar dictamen del tribunal evaluador asentado.</li>
+                                    <li>Confirmar folios y ejecutar bloqueo del registro informático.</li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+                    <a href="URL_VIDEO_AQUI" target="_blank" class="w-full flex items-center justify-center gap-2 bg-orange-500 hover:bg-orange-600 text-white font-semibold text-xs py-2.5 px-4 rounded-lg shadow-sm transition-colors mt-auto">
+                        <i data-lucide="play-circle" class="h-4 w-4"></i> Ver video tutorial
+                    </a>
+                </article>
+
+                <article class="procedure-card bg-white rounded-xl shadow-sm border border-slate-200 p-5 flex flex-col justify-between" data-category="actas">
+                    <div>
+                        <div class="flex items-start justify-between gap-4 mb-3">
+                            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-emerald-50 text-emerald-700 border border-emerald-200">
+                                <i data-lucide="file-text" class="h-3 w-3"></i> Actas
+                            </span>
+                        </div>
+                        <h3 class="text-base font-bold text-slate-900 mb-1">Rectificar Acta Regulares SIU</h3>
+                        <p class="text-xs text-slate-500 mb-4">Apertura de instancia de rectificación legal ante un error material u omisión involuntaria en actas ya cerradas.</p>
+                        
+                        <div class="border border-slate-100 rounded-lg overflow-hidden mb-4">
+                            <button onclick="toggleAccordion(this)" class="w-full flex items-center justify-between p-3 bg-slate-50 hover:bg-slate-100/80 text-left text-xs font-semibold text-slate-700 transition-colors">
+                                <span>Ver pasos del procedimiento</span>
+                                <i data-lucide="chevron-down" class="h-4 w-4 transform transition-transform duration-200"></i>
+                            </button>
+                            <div class="accordion-content bg-white px-4">
+                                <ol class="list-decimal list-inside text-xs text-slate-600 space-y-2 py-3 border-t border-slate-100">
+                                    <li>Entrar a 'Rectificar Actas de Cursadas'. Buscar el documento cerrado por número.</li>
+                                    <li>Seleccionar el alumno afectado e indicar la nueva calificación o condición.</li>
+                                    <li>Adjuntar o citar la Disposición/Resolución del IPAP que avala la enmienda administrativa.</li>
+                                    <li>Generar y cerrar el Acta Rectificativa.</li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+                    <a href="URL_VIDEO_AQUI" target="_blank" class="w-full flex items-center justify-center gap-2 bg-orange-500 hover:bg-orange-600 text-white font-semibold text-xs py-2.5 px-4 rounded-lg shadow-sm transition-colors mt-auto">
+                        <i data-lucide="play-circle" class="h-4 w-4"></i> Ver video tutorial
+                    </a>
+                </article>
+
+                <article class="procedure-card bg-white rounded-xl shadow-sm border border-slate-200 p-5 flex flex-col justify-between" data-category="actas">
+                    <div>
+                        <div class="flex items-start justify-between gap-4 mb-3">
+                            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-emerald-50 text-emerald-700 border border-emerald-200">
+                                <i data-lucide="file-text" class="h-3 w-3"></i> Actas
+                            </span>
+                        </div>
+                        <h3 class="text-base font-bold text-slate-900 mb-1">Rectificar Acta Libres SIU</h3>
+                        <p class="text-xs text-slate-500 mb-4">Enmienda formal de registros evaluativos finales de exámenes libres con el aval reglamentario correspondiente.</p>
+                        
+                        <div class="border border-slate-100 rounded-lg overflow-hidden mb-4">
+                            <button onclick="toggleAccordion(this)" class="w-full flex items-center justify-between p-3 bg-slate-50 hover:bg-slate-100/80 text-left text-xs font-semibold text-slate-700 transition-colors">
+                                <span>Ver pasos del procedimiento</span>
+                                <i data-lucide="chevron-down" class="h-4 w-4 transform transition-transform duration-200"></i>
+                            </button>
+                            <div class="accordion-content bg-white px-4">
+                                <ol class="list-decimal list-inside text-xs text-slate-600 space-y-2 py-3 border-t border-slate-100">
+                                    <li>Ejecutar la operación 'Rectificar Acta de Examen'.</li>
+                                    <li>Cargar datos validados, modificar la nota errónea y dejar constancia en el campo Observaciones.</li>
+                                    <li>Guardar cambios y proceder al cierre formal del documento enmendado.</li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+                    <a href="URL_VIDEO_AQUI" target="_blank" class="w-full flex items-center justify-center gap-2 bg-orange-500 hover:bg-orange-600 text-white font-semibold text-xs py-2.5 px-4 rounded-lg shadow-sm transition-colors mt-auto">
+                        <i data-lucide="play-circle" class="h-4 w-4"></i> Ver video tutorial
+                    </a>
+                </article>
+
+                <article class="procedure-card bg-white rounded-xl shadow-sm border border-slate-200 p-5 flex flex-col justify-between" data-category="contrasenas">
+                    <div>
+                        <div class="flex items-start justify-between gap-4 mb-3">
+                            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-amber-50 text-amber-700 border border-amber-200">
+                                <i data-lucide="lock" class="h-3 w-3"></i> Contraseñas
+                            </span>
+                        </div>
+                        <h3 class="text-base font-bold text-slate-900 mb-1">Cambiar Contraseña Moodle</h3>
+                        <p class="text-xs text-slate-500 mb-4">Blanqueo de claves para usuarios del campus virtual que tengan inconvenientes para el acceso a las aulas.</p>
+                        
+                        <div class="border border-slate-100 rounded-lg overflow-hidden mb-4">
+                            <button onclick="toggleAccordion(this)" class="w-full flex items-center justify-between p-3 bg-slate-50 hover:bg-slate-100/80 text-left text-xs font-semibold text-slate-700 transition-colors">
+                                <span>Ver pasos del procedimiento</span>
+                                <i data-lucide="chevron-down" class="h-4 w-4 transform transition-transform duration-200"></i>
+                            </button>
+                            <div class="accordion-content bg-white px-4">
+                                <ol class="list-decimal list-inside text-xs text-slate-600 space-y-2 py-3 border-t border-slate-100">
+                                    <li>Ingresar como Administrador o Gestor de Usuarios en Moodle.</li>
+                                    <li>Buscar al usuario en la lista por nombre, apellido o correo electrónico.</li>
+                                    <li>Hacer clic en configurar perfil, rellenar el campo 'Nueva Contraseña' o tildar 'Forzar cambio de contraseña'.</li>
+                                    <li>Guardar cambios y notificar la clave genérica al interesado.</li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+                    <a href="URL_VIDEO_AQUI" target="_blank" class="w-full flex items-center justify-center gap-2 bg-orange-500 hover:bg-orange-600 text-white font-semibold text-xs py-2.5 px-4 rounded-lg shadow-sm transition-colors mt-auto">
+                        <i data-lucide="play-circle" class="h-4 w-4"></i> Ver video tutorial
+                    </a>
+                </article>
+
+                <article class="procedure-card bg-white rounded-xl shadow-sm border border-slate-200 p-5 flex flex-col justify-between" data-category="contrasenas">
+                    <div>
+                        <div class="flex items-start justify-between gap-4 mb-3">
+                            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-amber-50 text-amber-700 border border-amber-200">
+                                <i data-lucide="lock" class="h-3 w-3"></i> Contraseñas
+                            </span>
+                        </div>
+                        <h3 class="text-base font-bold text-slate-900 mb-1">Cambiar Contraseña SIU</h3>
+                        <p class="text-xs text-slate-500 mb-4">Reconfiguración de credenciales de acceso para personal o alumnos en el entorno de gestión académica.</p>
+                        
+                        <div class="border border-slate-100 rounded-lg overflow-hidden mb-4">
+                            <button onclick="toggleAccordion(this)" class="w-full flex items-center justify-between p-3 bg-slate-50 hover:bg-slate-100/80 text-left text-xs font-semibold text-slate-700 transition-colors">
+                                <span>Ver pasos del procedimiento</span>
+                                <i data-lucide="chevron-down" class="h-4 w-4 transform transition-transform duration-200"></i>
+                            </button>
+                            <div class="accordion-content bg-white px-4">
+                                <ol class="list-decimal list-inside text-xs text-slate-600 space-y-2 py-3 border-t border-slate-100">
+                                    <li>Navegar a la operación 'Mantenimiento de Usuarios' en la consola del SIU.</li>
+                                    <li>Localizar la cuenta por número de DNI.</li>
+                                    <li>Hacer clic en 'Generar Nueva Clave' o asignar una contraseña provisoria de forma manual.</li>
+                                    <li>Guardar los cambios operativos en la cuenta de usuario de gestión o autogestión.</li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+                    <a href="URL_VIDEO_AQUI" target="_blank" class="w-full flex items-center justify-center gap-2 bg-orange-500 hover:bg-orange-600 text-white font-semibold text-xs py-2.5 px-4 rounded-lg shadow-sm transition-colors mt-auto">
+                        <i data-lucide="play-circle" class="h-4 w-4"></i> Ver video tutorial
+                    </a>
+                </article>
+
+                <article class="procedure-card bg-white rounded-xl shadow-sm border border-slate-200 p-5 flex flex-col justify-between" data-category="mesas-examen">
+                    <div>
+                        <div class="flex items-start justify-between gap-4 mb-3">
+                            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-purple-50 text-purple-700 border border-purple-200">
+                                <i data-lucide="calendar" class="h-3 w-3"></i> Mesas de Examen
+                            </span>
+                        </div>
+                        <h3 class="text-base font-bold text-slate-900 mb-1">Actualizar Mesa de Examen SIU</h3>
+                        <p class="text-xs text-slate-500 mb-4">Modificación de fecha, hora o integrantes del tribunal evaluador asignados a un turno vigente.</p>
+                        
+                        <div class="border border-slate-100 rounded-lg overflow-hidden mb-4">
+                            <button onclick="toggleAccordion(this)" class="w-full flex items-center justify-between p-3 bg-slate-50 hover:bg-slate-100/80 text-left text-xs font-semibold text-slate-700 transition-colors">
+                                <span>Ver pasos del procedimiento</span>
+                                <i data-lucide="chevron-down" class="h-4 w-4 transform transition-transform duration-200"></i>
+                            </button>
+                            <div class="accordion-content bg-white px-4">
+                                <ol class="list-decimal list-inside text-xs text-slate-600 space-y-2 py-3 border-t border-slate-100">
+                                    <li>Ingresar al menú 'Exámenes' -> 'Administrar Mesas de Examen'.</li>
+                                    <li>Filtrar por actividad/materia y turno de examen vigente.</li>
+                                    <li>Efectuar los cambios requeridos (ej. suplencia de presidente de mesa o cambio de aula física/virtual).</li>
+                                    <li>Confirmar modificaciones para actualizar la agenda de los alumnos.</li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+                    <a href="URL_VIDEO_AQUI" target="_blank" class="w-full flex items-center justify-center gap-2 bg-orange-500 hover:bg-orange-600 text-white font-semibold text-xs py-2.5 px-4 rounded-lg shadow-sm transition-colors mt-auto">
+                        <i data-lucide="play-circle" class="h-4 w-4"></i> Ver video tutorial
+                    </a>
+                </article>
+
+                <article class="procedure-card bg-white rounded-xl shadow-sm border border-slate-200 p-5 flex flex-col justify-between" data-category="mesas-examen">
+                    <div>
+                        <div class="flex items-start justify-between gap-4 mb-3">
+                            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-purple-50 text-purple-700 border border-purple-200">
+                                <i data-lucide="calendar" class="h-3 w-3"></i> Mesas de Examen
+                            </span>
+                        </div>
+                        <h3 class="text-base font-bold text-slate-900 mb-1">Inscribir Fuera de Término a estudiante en mesa de Examen SIU</h3>
+                        <p class="text-xs text-slate-500 mb-4">Inscripción excepcional de un alumno a una mesa fuera de los plazos estándares de autogestión.</p>
+                        
+                        <div class="border border-slate-100 rounded-lg overflow-hidden mb-4">
+                            <button onclick="toggleAccordion(this)" class="w-full flex items-center justify-between p-3 bg-slate-50 hover:bg-slate-100/80 text-left text-xs font-semibold text-slate-700 transition-colors">
+                                <span>Ver pasos del procedimiento</span>
+                                <i data-lucide="chevron-down" class="h-4 w-4 transform transition-transform duration-200"></i>
+                            </button>
+                            <div class="accordion-content bg-white px-4">
+                                <ol class="list-decimal list-inside text-xs text-slate-600 space-y-2 py-3 border-t border-slate-100">
+                                    <li>Ir a 'Exámenes' -> 'Inscribir a Examen Fuera de Término'.</li>
+                                    <li>Buscar al estudiante por legajo o documento y seleccionar la mesa correspondiente.</li>
+                                    <li>Omitir las validaciones automáticas temporales del sistema y confirmar la inscripción.</li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+                    <a href="URL_VIDEO_AQUI" target="_blank" class="w-full flex items-center justify-center gap-2 bg-orange-500 hover:bg-orange-600 text-white font-semibold text-xs py-2.5 px-4 rounded-lg shadow-sm transition-colors mt-auto">
+                        <i data-lucide="play-circle" class="h-4 w-4"></i> Ver video tutorial
+                    </a>
+                </article>
+
+                <article class="procedure-card bg-white rounded-xl shadow-sm border border-slate-200 p-5 flex flex-col justify-between" data-category="mesas-examen">
+                    <div>
+                        <div class="flex items-start justify-between gap-4 mb-3">
+                            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-purple-50 text-purple-700 border border-purple-200">
+                                <i data-lucide="calendar" class="h-3 w-3"></i> Mesas de Examen
+                            </span>
+                        </div>
+                        <h3 class="text-base font-bold text-slate-900 mb-1">Modificar Calendario Examen SIU</h3>
+                        <p class="text-xs text-slate-500 mb-4">Alteración global de ventanas temporales de inscripción y dictado de llamados para un turno académico.</p>
+                        
+                        <div class="border border-slate-100 rounded-lg overflow-hidden mb-4">
+                            <button onclick="toggleAccordion(this)" class="w-full flex items-center justify-between p-3 bg-slate-50 hover:bg-slate-100/80 text-left text-xs font-semibold text-slate-700 transition-colors">
+                                <span>Ver pasos del procedimiento</span>
+                                <i data-lucide="chevron-down" class="h-4 w-4 transform transition-transform duration-200"></i>
+                            </button>
+                            <div class="accordion-content bg-white px-4">
+                                <ol class="list-decimal list-inside text-xs text-slate-600 space-y-2 py-3 border-t border-slate-100">
+                                    <li>Ingresar a la gestión estructural del Calendario Académico dentro del sistema.</li>
+                                    <li>Localizar el Turno de Examen afectado y editar las fechas límite de habilitación o baja.</li>
+                                    <li>Guardar la operación para recalcular los permisos globales en los perfiles de alumnos.</li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+                    <a href="URL_VIDEO_AQUI" target="_blank" class="w-full flex items-center justify-center gap-2 bg-orange-500 hover:bg-orange-600 text-white font-semibold text-xs py-2.5 px-4 rounded-lg shadow-sm transition-colors mt-auto">
+                        <i data-lucide="play-circle" class="h-4 w-4"></i> Ver video tutorial
+                    </a>
+                </article>
+
+                <article class="procedure-card bg-white rounded-xl shadow-sm border border-slate-200 p-5 flex flex-col justify-between" data-category="comisiones-inscripciones">
+                    <div>
+                        <div class="flex items-start justify-between gap-4 mb-3">
+                            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-rose-50 text-rose-700 border border-rose-200">
+                                <i data-lucide="clipboard-list" class="h-3 w-3"></i> Comisiones e Inscrip.
+                            </span>
+                        </div>
+                        <h3 class="text-base font-bold text-slate-900 mb-1">Inscribir Fuera de Término a estudiante en comisión SIU</h3>
+                        <p class="text-xs text-slate-500 mb-4">Alta excepcional en una cursada regular cuando el período estándar por autogestión ha finalizado.</p>
+                        
+                        <div class="border border-slate-100 rounded-lg overflow-hidden mb-4">
+                            <button onclick="toggleAccordion(this)" class="w-full flex items-center justify-between p-3 bg-slate-50 hover:bg-slate-100/80 text-left text-xs font-semibold text-slate-700 transition-colors">
+                                <span>Ver pasos del procedimiento</span>
+                                <i data-lucide="chevron-down" class="h-4 w-4 transform transition-transform duration-200"></i>
+                            </button>
+                            <div class="accordion-content bg-white px-4">
+                                <ol class="list-decimal list-inside text-xs text-slate-600 space-y-2 py-3 border-t border-slate-100">
+                                    <li>Acceder a 'Cursadas' -> 'Inscribir a Cursadas Fuera de Término'.</li>
+                                    <li>Buscar al estudiante y seleccionar la materia y comisión correspondiente.</li>
+                                    <li>Confirmar la inscripción forzando la asignación al listado de alumnos regulares.</li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+                    <a href="URL_VIDEO_AQUI" target="_blank" class="w-full flex items-center justify-center gap-2 bg-orange-500 hover:bg-orange-600 text-white font-semibold text-xs py-2.5 px-4 rounded-lg shadow-sm transition-colors mt-auto">
+                        <i data-lucide="play-circle" class="h-4 w-4"></i> Ver video tutorial
+                    </a>
+                </article>
+
+                <article class="procedure-card bg-white rounded-xl shadow-sm border border-slate-200 p-5 flex flex-col justify-between" data-category="comisiones-inscripciones">
+                    <div>
+                        <div class="flex items-start justify-between gap-4 mb-3">
+                            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-rose-50 text-rose-700 border border-rose-200">
+                                <i data-lucide="clipboard-list" class="h-3 w-3"></i> Comisiones e Inscrip.
+                            </span>
+                        </div>
+                        <h3 class="text-base font-bold text-slate-900 mb-1">Cargar Horario en Comisión SIU</h3>
+                        <p class="text-xs text-slate-500 mb-4">Carga del cronograma semanal (días, horas y bandas horarias) para el correcto ordenamiento de las aulas.</p>
+                        
+                        <div class="border border-slate-100 rounded-lg overflow-hidden mb-4">
+                            <button onclick="toggleAccordion(this)" class="w-full flex items-center justify-between p-3 bg-slate-50 hover:bg-slate-100/80 text-left text-xs font-semibold text-slate-700 transition-colors">
+                                <span>Ver pasos del procedimiento</span>
+                                <i data-lucide="chevron-down" class="h-4 w-4 transform transition-transform duration-200"></i>
+                            </button>
+                            <div class="accordion-content bg-white px-4">
+                                <ol class="list-decimal list-inside text-xs text-slate-600 space-y-2 py-3 border-t border-slate-100">
+                                    <li>Ingresar a la edición específica de la comisión requerida.</li>
+                                    <li>Acceder a la sección 'Horarios de Cursada'.</li>
+                                    <li>Definir día de la semana, hora de inicio y fin, y asignar el espacio áulico determinado.</li>
+                                    <li>Guardar cambios.</li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+                    <a href="URL_VIDEO_AQUI" target="_blank" class="w-full flex items-center justify-center gap-2 bg-orange-500 hover:bg-orange-600 text-white font-semibold text-xs py-2.5 px-4 rounded-lg shadow-sm transition-colors mt-auto">
+                        <i data-lucide="play-circle" class="h-4 w-4"></i> Ver video tutorial
+                    </a>
+                </article>
+
+                <article class="procedure-card bg-white rounded-xl shadow-sm border border-slate-200 p-5 flex flex-col justify-between" data-category="comisiones-inscripciones">
+                    <div>
+                        <div class="flex items-start justify-between gap-4 mb-3">
+                            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-rose-50 text-rose-700 border border-rose-200">
+                                <i data-lucide="clipboard-list" class="h-3 w-3"></i> Comisiones e Inscrip.
+                            </span>
+                        </div>
+                        <h3 class="text-base font-bold text-slate-900 mb-1">Modificar Calendario Cursada SIU</h3>
+                        <p class="text-xs text-slate-500 mb-4">Ajuste estructural de las fechas de dictado, inicio y fin de cuatrimestres o períodos lectivos generales.</p>
+                        
+                        <div class="border border-slate-100 rounded-lg overflow-hidden mb-4">
+                            <button onclick="toggleAccordion(this)" class="w-full flex items-center justify-between p-3 bg-slate-50 hover:bg-slate-100/80 text-left text-xs font-semibold text-slate-700 transition-colors">
+                                <span>Ver pasos del procedimiento</span>
+                                <i data-lucide="chevron-down" class="h-4 w-4 transform transition-transform duration-200"></i>
+                            </button>
+                            <div class="accordion-content bg-white px-4">
+                                <ol class="list-decimal list-inside text-xs text-slate-600 space-y-2 py-3 border-t border-slate-100">
+                                    <li>Ir al módulo 'Calendario Académico' dentro de la interfaz central.</li>
+                                    <li>Seleccionar el Período Lectivo correspondiente y modificar los hitos de Cursadas.</li>
+                                    <li>Actualizar los rangos de vigencia y guardar los cambios institucionales.</li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+                    <a href="URL_VIDEO_AQUI" target="_blank" class="w-full flex items-center justify-center gap-2 bg-orange-500 hover:bg-orange-600 text-white font-semibold text-xs py-2.5 px-4 rounded-lg shadow-sm transition-colors mt-auto">
+                        <i data-lucide="play-circle" class="h-4 w-4"></i> Ver video tutorial
+                    </a>
+                </article>
+
+                <article class="procedure-card bg-white rounded-xl shadow-sm border border-slate-200 p-5 flex flex-col justify-between" data-category="comisiones-inscripciones">
+                    <div>
+                        <div class="flex items-start justify-between gap-4 mb-3">
+                            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-rose-50 text-rose-700 border border-rose-200">
+                                <i data-lucide="clipboard-list" class="h-3 w-3"></i> Comisiones e Inscrip.
+                            </span>
+                        </div>
+                        <h3 class="text-base font-bold text-slate-900 mb-1">Inscripción de un Alumno en Período SIU</h3>
+                        <p class="text-xs text-slate-500 mb-4">Gestión por ventanilla administrativa para formalizar el alta de materias dentro del calendario regular.</p>
+                        
+                        <div class="border border-slate-100 rounded-lg overflow-hidden mb-4">
+                            <button onclick="toggleAccordion(this)" class="w-full flex items-center justify-between p-3 bg-slate-50 hover:bg-slate-100/80 text-left text-xs font-semibold text-slate-700 transition-colors">
+                                <span>Ver pasos del procedimiento</span>
+                                <i data-lucide="chevron-down" class="h-4 w-4 transform transition-transform duration-200"></i>
+                            </button>
+                            <div class="accordion-content bg-white px-4">
+                                <ol class="list-decimal list-inside text-xs text-slate-600 space-y-2 py-3 border-t border-slate-100">
+                                    <li>Ingresar a 'Inscripciones' -> 'Inscribir a Cursadas'.</li>
+                                    <li>Buscar al alumno, desplegar la oferta académica disponible del período activo.</li>
+                                    <li>Seleccionar la comisión y hacer clic en 'Inscribir'. Imprimir comprobante en caso de requerirse.</li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+                    <a href="URL_VIDEO_AQUI" target="_blank" class="w-full flex items-center justify-center gap-2 bg-orange-500 hover:bg-orange-600 text-white font-semibold text-xs py-2.5 px-4 rounded-lg shadow-sm transition-colors mt-auto">
+                        <i data-lucide="play-circle" class="h-4 w-4"></i> Ver video tutorial
+                    </a>
+                </article>
+
+                <article class="procedure-card bg-white rounded-xl shadow-sm border border-slate-200 p-5 flex flex-col justify-between" data-category="comisiones-inscripciones">
+                    <div>
+                        <div class="flex items-start justify-between gap-4 mb-3">
+                            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-rose-50 text-rose-700 border border-rose-200">
+                                <i data-lucide="clipboard-list" class="h-3 w-3"></i> Comisiones e Inscrip.
+                            </span>
+                        </div>
+                        <h3 class="text-base font-bold text-slate-900 mb-1">Inscripción de un Alumno Fuera de Período SIU</h3>
+                        <p class="text-xs text-slate-500 mb-4">Tramitación excepcional para incluir estudiantes en propuestas formativas fuera de los rangos comunes.</p>
+                        
+                        <div class="border border-slate-100 rounded-lg overflow-hidden mb-4">
+                            <button onclick="toggleAccordion(this)" class="w-full flex items-center justify-between p-3 bg-slate-50 hover:bg-slate-100/80 text-left text-xs font-semibold text-slate-700 transition-colors">
+                                <span>Ver pasos del procedimiento</span>
+                                <i data-lucide="chevron-down" class="h-4 w-4 transform transition-transform duration-200"></i>
+                            </button>
+                            <div class="accordion-content bg-white px-4">
+                                <ol class="list-decimal list-inside text-xs text-slate-600 space-y-2 py-3 border-t border-slate-100">
+                                    <li>Ingresar a la operación para inscripciones excepcionales a la propuesta académica.</li>
+                                    <li>Cargar el legajo, forzar la omisión del control de calendario y guardar los cambios.</li>
+                                    <li>Verificar que el estado de la matrícula quede activo en el reporte de la carrera.</li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+                    <a href="URL_VIDEO_AQUI" target="_blank" class="w-full flex items-center justify-center gap-2 bg-orange-500 hover:bg-orange-600 text-white font-semibold text-xs py-2.5 px-4 rounded-lg shadow-sm transition-colors mt-auto">
+                        <i data-lucide="play-circle" class="h-4 w-4"></i> Ver video tutorial
+                    </a>
+                </article>
+
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Inicializar iconos de Lucide
+        lucide.createIcons();
+
+        let currentCategoryFilter = null;
+
+        // Buscador dinámico en tiempo real
+        const globalSearch = document.getElementById('globalSearch');
+        globalSearch.addEventListener('input', function(e) {
+            filterCards();
+        });
+
+        // Alternar colapsables (Acordeón de pasos)
+        function toggleAccordion(button) {
+            const content = button.nextElementSibling;
+            const icon = button.querySelector('[data-lucide="chevron-down"]');
+            
+            content.classList.toggle('open');
+            
+            if (content.classList.contains('open')) {
+                icon.style.transform = 'rotate(180deg)';
+            } else {
+                icon.style.transform = 'rotate(0deg)';
+            }
+        }
+
+        // Filtrar por categoría desde el Menú Lateral
+        function filterByCategory(category) {
+            // Manejar estilos activos de la navegación
+            const navButtons = document.querySelectorAll('#sidebarMenu button');
+            navButtons.forEach(btn => btn.classList.remove('bg-slate-100', 'font-semibold', 'text-blue-600', 'active-nav'));
+            
+            const currentWrapper = document.querySelector(`[data-cat="${category}"]`);
+            if (currentWrapper) {
+                const btn = currentWrapper.querySelector('button');
+                btn.classList.add('bg-slate-100', 'font-semibold', 'text-blue-600', 'active-nav');
+            }
+
+            currentCategoryFilter = category;
+            filterCards();
+        }
+
+        // Limpiar todos los filtros y restablecer vista
+        function clearFilters() {
+            currentCategoryFilter = null;
+            globalSearch.value = '';
+            
+            const navButtons = document.querySelectorAll('#sidebarMenu button');
+            navButtons.forEach(btn => btn.classList.remove('bg-slate-100', 'font-semibold', 'text-blue-600', 'active-nav'));
+            
+            // Reasignar la primera categoría como destacada por defecto si se desea o dejar limpio
+            filterCards();
+        }
+
+        // Función troncal de filtrado (Combina Buscador + Categoría Lateral)
+        function filterCards() {
+            const query = globalSearch.value.toLowerCase().trim();
+            const cards = document.querySelectorAll('.procedure-card');
+            let visibleCount = 0;
+
+            cards.forEach(card => {
+                const cardCategory = card.getAttribute('data-category');
+                const title = card.querySelector('h3').textContent.toLowerCase();
+                const description = card.querySelector('p').textContent.toLowerCase();
+                
+                const matchesCategory = !currentCategoryFilter || cardCategory === currentCategoryFilter;
+                const matchesSearch = title.includes(query) || description.includes(query);
+
+                if (matchesCategory && matchesSearch) {
+                    card.classList.remove('hidden');
+                    visibleCount++;
+                } else {
+                    card.classList.add('hidden');
+                }
+            });
+
+            // Mostrar u ocultar mensaje de "No resultados"
+            const noResults = document.getElementById('noResults');
+            if (visibleCount === 0) {
+                noResults.classList.remove('hidden');
+            } else {
+                noResults.classList.add('hidden');
+            }
+        }
+
+        // Ejecutar un filtrado inicial al cargar la página para definir el estado inicial limpio
+        filterCards();
+    </script>
+</body>
+</html>
