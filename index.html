@@ -244,6 +244,26 @@
                         </ul>
                     </div>
                 </div>
+                <div class="category-group" data-cat="moodle">
+                    <button onclick="toggleCategory(this)" class="w-full flex items-center justify-between p-2.5 rounded-lg text-sm font-medium text-slate-700 hover:bg-slate-100 transition-colors group">
+                        <div class="flex items-center gap-2.5">
+                            <i data-lucide="graduation-cap" class="h-4 w-4 text-sky-600"></i>
+                            <span>Moodle</span>
+                        </div>
+                        <div class="flex items-center gap-1.5">
+                            <span class="bg-slate-100 text-slate-600 text-xs px-2 py-0.5 rounded-full font-bold group-hover:bg-white border border-slate-200">4</span>
+                            <i data-lucide="chevron-down" class="h-3.5 w-3.5 text-slate-400 chevron-icon"></i>
+                        </div>
+                    </button>
+                    <div class="category-children">
+                        <ul class="space-y-0.5 pt-1 pb-2 pl-7">
+                            <li><button onclick='scrollToProcedure("Desmatricular estudiante en Moodle")' class="sidebar-link w-full text-left text-xs text-slate-500 hover:text-blue-600 py-1 px-2 rounded hover:bg-blue-50 transition-colors">Desmatricular estudiante en Moodle</button></li>
+                            <li><button onclick='scrollToProcedure("Borrar Materia en Moodle")' class="sidebar-link w-full text-left text-xs text-slate-500 hover:text-blue-600 py-1 px-2 rounded hover:bg-blue-50 transition-colors">Borrar Materia en Moodle</button></li>
+                            <li><button onclick='scrollToProcedure("Crear curso en Moodle")' class="sidebar-link w-full text-left text-xs text-slate-500 hover:text-blue-600 py-1 px-2 rounded hover:bg-blue-50 transition-colors">Crear curso en Moodle</button></li>
+                            <li><button onclick='scrollToProcedure("Ocultar aula Moodle")' class="sidebar-link w-full text-left text-xs text-slate-500 hover:text-blue-600 py-1 px-2 rounded hover:bg-blue-50 transition-colors">Ocultar aula Moodle</button></li>
+                        </ul>
+                    </div>
+                </div>
 
                 <hr class="border-slate-200 my-3">
 
@@ -875,6 +895,126 @@
                         </div>
                     </div>
                     <a href="URL_VIDEO_AQUI" target="_blank" class="w-full flex items-center justify-center gap-2 bg-orange-500 hover:bg-orange-600 text-white font-semibold text-xs py-2.5 px-4 rounded-lg shadow-sm transition-colors mt-auto">
+                        <i data-lucide="play-circle" class="h-4 w-4"></i> Ver video tutorial
+                    </a>
+                </article>
+
+                <article class="procedure-card bg-white rounded-xl shadow-sm border border-slate-200 p-5 flex flex-col justify-between" data-category="moodle">
+                    <div>
+                        <div class="flex items-start justify-between gap-4 mb-3">
+                            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-sky-50 text-sky-700 border border-sky-200">
+                                <i data-lucide="graduation-cap" class="h-3 w-3"></i> Moodle
+                            </span>
+                        </div>
+                        <h3 class="text-base font-bold text-slate-900 mb-1">Desmatricular estudiante en Moodle</h3>
+                        <p class="text-xs text-slate-500 mb-4">Baja de un estudiante de un aula virtual cuando ya no corresponde que esté inscripto.</p>
+
+                        <div class="border border-slate-100 rounded-lg overflow-hidden mb-4">
+                            <button onclick="toggleAccordion(this)" class="w-full flex items-center justify-between p-3 bg-slate-50 hover:bg-slate-100/80 text-left text-xs font-semibold text-slate-700 transition-colors">
+                                <span>Ver pasos del procedimiento</span>
+                                <i data-lucide="chevron-down" class="h-4 w-4 transform transition-transform duration-200"></i>
+                            </button>
+                            <div class="accordion-content bg-white px-4">
+                                <ol class="list-decimal list-inside text-xs text-slate-600 space-y-2 py-3 border-t border-slate-100">
+                                    <li>Ingresar al aula de Moodle y hacer clic en 'Participantes'.</li>
+                                    <li>Buscar al estudiante por nombre o apellido.</li>
+                                    <li>Seleccionarlo con el checkbox y en el menú desplegable elegir 'Desmatricular'.</li>
+                                    <li>Confirmar la baja en la ventana de diálogo.</li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+                    <a href="https://drive.google.com/file/d/16raMTNzNrOnutWAT3JqGakQHviQLv9gB/view?usp=sharing" target="_blank" class="w-full flex items-center justify-center gap-2 bg-orange-500 hover:bg-orange-600 text-white font-semibold text-xs py-2.5 px-4 rounded-lg shadow-sm transition-colors mt-auto">
+                        <i data-lucide="play-circle" class="h-4 w-4"></i> Ver video tutorial
+                    </a>
+                </article>
+
+                <article class="procedure-card bg-white rounded-xl shadow-sm border border-slate-200 p-5 flex flex-col justify-between" data-category="moodle">
+                    <div>
+                        <div class="flex items-start justify-between gap-4 mb-3">
+                            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-sky-50 text-sky-700 border border-sky-200">
+                                <i data-lucide="graduation-cap" class="h-3 w-3"></i> Moodle
+                            </span>
+                        </div>
+                        <h3 class="text-base font-bold text-slate-900 mb-1">Borrar Materia en Moodle</h3>
+                        <p class="text-xs text-slate-500 mb-4">Eliminación definitiva de un curso completo y todo su contenido del campus virtual.</p>
+
+                        <div class="border border-slate-100 rounded-lg overflow-hidden mb-4">
+                            <button onclick="toggleAccordion(this)" class="w-full flex items-center justify-between p-3 bg-slate-50 hover:bg-slate-100/80 text-left text-xs font-semibold text-slate-700 transition-colors">
+                                <span>Ver pasos del procedimiento</span>
+                                <i data-lucide="chevron-down" class="h-4 w-4 transform transition-transform duration-200"></i>
+                            </button>
+                            <div class="accordion-content bg-white px-4">
+                                <ol class="list-decimal list-inside text-xs text-slate-600 space-y-2 py-3 border-t border-slate-100">
+                                    <li>Ingresar al curso que se desea eliminar.</li>
+                                    <li>Ir a 'Administración del curso' > 'Eliminar curso'.</li>
+                                    <li>Leer la advertencia y marcar la confirmación de eliminación.</li>
+                                    <li>Hacer clic en 'Eliminar' para borrar definitivamente el curso y todo su contenido.</li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+                    <a href="https://drive.google.com/file/d/1U8Zo4OTNt0CiPviOz8gm4G5Nb7jsMpkF/view?usp=sharing" target="_blank" class="w-full flex items-center justify-center gap-2 bg-orange-500 hover:bg-orange-600 text-white font-semibold text-xs py-2.5 px-4 rounded-lg shadow-sm transition-colors mt-auto">
+                        <i data-lucide="play-circle" class="h-4 w-4"></i> Ver video tutorial
+                    </a>
+                </article>
+
+                <article class="procedure-card bg-white rounded-xl shadow-sm border border-slate-200 p-5 flex flex-col justify-between" data-category="moodle">
+                    <div>
+                        <div class="flex items-start justify-between gap-4 mb-3">
+                            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-sky-50 text-sky-700 border border-sky-200">
+                                <i data-lucide="graduation-cap" class="h-3 w-3"></i> Moodle
+                            </span>
+                        </div>
+                        <h3 class="text-base font-bold text-slate-900 mb-1">Crear curso en Moodle</h3>
+                        <p class="text-xs text-slate-500 mb-4">Generación de un nuevo espacio áulico virtual para el dictado de una materia o capacitación.</p>
+
+                        <div class="border border-slate-100 rounded-lg overflow-hidden mb-4">
+                            <button onclick="toggleAccordion(this)" class="w-full flex items-center justify-between p-3 bg-slate-50 hover:bg-slate-100/80 text-left text-xs font-semibold text-slate-700 transition-colors">
+                                <span>Ver pasos del procedimiento</span>
+                                <i data-lucide="chevron-down" class="h-4 w-4 transform transition-transform duration-200"></i>
+                            </button>
+                            <div class="accordion-content bg-white px-4">
+                                <ol class="list-decimal list-inside text-xs text-slate-600 space-y-2 py-3 border-t border-slate-100">
+                                    <li>Ir a 'Administración del sitio' > 'Cursos' > 'Agregar un nuevo curso'.</li>
+                                    <li>Completar nombre completo del curso, nombre corto y seleccionar la categoría.</li>
+                                    <li>Configurar formato del curso, fecha de inicio y modo de grupo según corresponda.</li>
+                                    <li>Guardar cambios y verificar que el curso aparezca en la lista de cursos disponibles.</li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+                    <a href="https://drive.google.com/file/d/1stIn1HnRhY_EL7N4mj7Yy6-UDU388DLA/view?usp=sharing" target="_blank" class="w-full flex items-center justify-center gap-2 bg-orange-500 hover:bg-orange-600 text-white font-semibold text-xs py-2.5 px-4 rounded-lg shadow-sm transition-colors mt-auto">
+                        <i data-lucide="play-circle" class="h-4 w-4"></i> Ver video tutorial
+                    </a>
+                </article>
+
+                <article class="procedure-card bg-white rounded-xl shadow-sm border border-slate-200 p-5 flex flex-col justify-between" data-category="moodle">
+                    <div>
+                        <div class="flex items-start justify-between gap-4 mb-3">
+                            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-sky-50 text-sky-700 border border-sky-200">
+                                <i data-lucide="graduation-cap" class="h-3 w-3"></i> Moodle
+                            </span>
+                        </div>
+                        <h3 class="text-base font-bold text-slate-900 mb-1">Ocultar aula Moodle</h3>
+                        <p class="text-xs text-slate-500 mb-4">Ocultamiento temporal de un curso a los estudiantes sin eliminarlo del sistema.</p>
+
+                        <div class="border border-slate-100 rounded-lg overflow-hidden mb-4">
+                            <button onclick="toggleAccordion(this)" class="w-full flex items-center justify-between p-3 bg-slate-50 hover:bg-slate-100/80 text-left text-xs font-semibold text-slate-700 transition-colors">
+                                <span>Ver pasos del procedimiento</span>
+                                <i data-lucide="chevron-down" class="h-4 w-4 transform transition-transform duration-200"></i>
+                            </button>
+                            <div class="accordion-content bg-white px-4">
+                                <ol class="list-decimal list-inside text-xs text-slate-600 space-y-2 py-3 border-t border-slate-100">
+                                    <li>Ingresar al curso que se desea ocultar.</li>
+                                    <li>Ir a 'Administración del curso' > 'Editar ajustes'.</li>
+                                    <li>En la sección 'Visibilidad del curso', seleccionar la opción 'Ocultar'.</li>
+                                    <li>Guardar cambios para que el curso deje de ser visible para los estudiantes.</li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+                    <a href="https://drive.google.com/file/d/1uINf2ial3QdB0dN3QWW7Il0aLbCbRq6l/view?usp=sharing" target="_blank" class="w-full flex items-center justify-center gap-2 bg-orange-500 hover:bg-orange-600 text-white font-semibold text-xs py-2.5 px-4 rounded-lg shadow-sm transition-colors mt-auto">
                         <i data-lucide="play-circle" class="h-4 w-4"></i> Ver video tutorial
                     </a>
                 </article>
