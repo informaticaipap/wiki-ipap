@@ -175,7 +175,7 @@
                             <span>Actas</span>
                         </div>
                         <div class="flex items-center gap-1.5">
-                            <span class="bg-slate-100 text-slate-600 text-xs px-2 py-0.5 rounded-full font-bold group-hover:bg-white border border-slate-200">6</span>
+                            <span class="bg-slate-100 text-slate-600 text-xs px-2 py-0.5 rounded-full font-bold group-hover:bg-white border border-slate-200">7</span>
                             <i data-lucide="chevron-down" class="h-3.5 w-3.5 text-slate-400 chevron-icon"></i>
                         </div>
                     </button>
@@ -187,6 +187,7 @@
                             <li><button onclick='scrollToProcedure("Rectificar Acta Libres SIU")' class="sidebar-link w-full text-left text-xs text-slate-500 hover:text-blue-600 py-1 px-2 rounded hover:bg-blue-50 transition-colors">Rectificar Acta Libres SIU</button></li>
                             <li><button onclick='scrollToProcedure("Agregar Alumno a acta de Comisión SIU")' class="sidebar-link w-full text-left text-xs text-slate-500 hover:text-blue-600 py-1 px-2 rounded hover:bg-blue-50 transition-colors">Agregar Alumno a acta de Comisión SIU</button></li>
                             <li><button onclick='scrollToProcedure("Eliminar Alumno Acta de Comisión SIU")' class="sidebar-link w-full text-left text-xs text-slate-500 hover:text-blue-600 py-1 px-2 rounded hover:bg-blue-50 transition-colors">Eliminar Alumno Acta de Comisión SIU</button></li>
+                            <li><button onclick='scrollToProcedure("Baja de estudiante en Examen final con alumno en acta")' class="sidebar-link w-full text-left text-xs text-slate-500 hover:text-blue-600 py-1 px-2 rounded hover:bg-blue-50 transition-colors">Baja de estudiante en Examen final con alumno en acta</button></li>
                         </ul>
                     </div>
                 </div>
@@ -255,7 +256,7 @@
                             <span>Moodle</span>
                         </div>
                         <div class="flex items-center gap-1.5">
-                            <span class="bg-slate-100 text-slate-600 text-xs px-2 py-0.5 rounded-full font-bold group-hover:bg-white border border-slate-200">5</span>
+                            <span class="bg-slate-100 text-slate-600 text-xs px-2 py-0.5 rounded-full font-bold group-hover:bg-white border border-slate-200">6</span>
                             <i data-lucide="chevron-down" class="h-3.5 w-3.5 text-slate-400 chevron-icon"></i>
                         </div>
                     </button>
@@ -266,6 +267,7 @@
                             <li><button onclick='scrollToProcedure("Crear curso en Moodle")' class="sidebar-link w-full text-left text-xs text-slate-500 hover:text-blue-600 py-1 px-2 rounded hover:bg-blue-50 transition-colors">Crear curso en Moodle</button></li>
                             <li><button onclick='scrollToProcedure("Ocultar aula Moodle")' class="sidebar-link w-full text-left text-xs text-slate-500 hover:text-blue-600 py-1 px-2 rounded hover:bg-blue-50 transition-colors">Ocultar aula Moodle</button></li>
                             <li><button onclick='scrollToProcedure("Mover aula a categoría Moodle")' class="sidebar-link w-full text-left text-xs text-slate-500 hover:text-blue-600 py-1 px-2 rounded hover:bg-blue-50 transition-colors">Mover aula a categoría Moodle</button></li>
+                            <li><button onclick='scrollToProcedure("Carga masiva de estudiantes en Un aula para una categoria Moodle")' class="sidebar-link w-full text-left text-xs text-slate-500 hover:text-blue-600 py-1 px-2 rounded hover:bg-blue-50 transition-colors">Carga masiva de estudiantes en Un aula para una categoria Moodle</button></li>
                         </ul>
                     </div>
                 </div>
@@ -729,6 +731,36 @@
                     </a>
                 </article>
 
+                <article class="procedure-card bg-white rounded-xl shadow-sm border border-slate-200 p-5 flex flex-col justify-between" data-category="actas">
+                    <div>
+                        <div class="flex items-start justify-between gap-4 mb-3">
+                            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-emerald-50 text-emerald-700 border border-emerald-200">
+                                <i data-lucide="file-text" class="h-3 w-3"></i> Actas
+                            </span>
+                        </div>
+                        <h3 class="text-base font-bold text-slate-900 mb-1">Baja de estudiante en Examen final con alumno en acta <i data-lucide="film" class="h-4 w-4 inline text-orange-500 align-middle"></i></h3>
+                        <p class="text-xs text-slate-500 mb-4">Eliminación de un estudiante de un acta de examen final cuando ya está registrado en la misma.</p>
+
+                        <div class="border border-slate-100 rounded-lg overflow-hidden mb-4">
+                            <button onclick="toggleAccordion(this)" class="w-full flex items-center justify-between p-3 bg-slate-50 hover:bg-slate-100/80 text-left text-xs font-semibold text-slate-700 transition-colors">
+                                <span>Ver pasos del procedimiento</span>
+                                <i data-lucide="chevron-down" class="h-4 w-4 transform transition-transform duration-200"></i>
+                            </button>
+                            <div class="accordion-content bg-white px-4">
+                                <ol class="list-decimal list-inside text-xs text-slate-600 space-y-2 py-3 border-t border-slate-100">
+                                    <li>Ir a 'Exámenes' y seleccionar la mesa de examen correspondiente.</li>
+                                    <li>Acceder al acta de examen final donde figura el alumno inscripto.</li>
+                                    <li>Localizar al estudiante y seleccionar la opción 'Eliminar' o 'Dar de Baja'.</li>
+                                    <li>Confirmar la baja y verificar que el alumno ya no figure en el acta del examen final.</li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+                    <a href="https://drive.google.com/file/d/19ClxiMJ9EoOum2FbAwoyOQcwVVIWLfgx/view?usp=sharing" target="_blank" class="w-full flex items-center justify-center gap-2 bg-orange-500 hover:bg-orange-600 text-white font-semibold text-xs py-2.5 px-4 rounded-lg shadow-sm transition-colors mt-auto">
+                        <i data-lucide="play-circle" class="h-4 w-4"></i> Ver video tutorial
+                    </a>
+                </article>
+
                 <article class="procedure-card bg-white rounded-xl shadow-sm border border-slate-200 p-5 flex flex-col justify-between" data-category="contrasenas">
                     <div>
                         <div class="flex items-start justify-between gap-4 mb-3">
@@ -1176,6 +1208,36 @@
                         </div>
                     </div>
                     <a href="https://drive.google.com/file/d/1gcFMEC9XQCl_HwauBkUZHjkscZDRnu2M/view?usp=sharing" target="_blank" class="w-full flex items-center justify-center gap-2 bg-orange-500 hover:bg-orange-600 text-white font-semibold text-xs py-2.5 px-4 rounded-lg shadow-sm transition-colors mt-auto">
+                        <i data-lucide="play-circle" class="h-4 w-4"></i> Ver video tutorial
+                    </a>
+                </article>
+
+                <article class="procedure-card bg-white rounded-xl shadow-sm border border-slate-200 p-5 flex flex-col justify-between" data-category="moodle">
+                    <div>
+                        <div class="flex items-start justify-between gap-4 mb-3">
+                            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-sky-50 text-sky-700 border border-sky-200">
+                                <i data-lucide="graduation-cap" class="h-3 w-3"></i> Moodle
+                            </span>
+                        </div>
+                        <h3 class="text-base font-bold text-slate-900 mb-1">Carga masiva de estudiantes en Un aula para una categoria Moodle <i data-lucide="film" class="h-4 w-4 inline text-orange-500 align-middle"></i></h3>
+                        <p class="text-xs text-slate-500 mb-4">Inscripción masiva de estudiantes en un aula virtual agrupados por categoría en Moodle.</p>
+
+                        <div class="border border-slate-100 rounded-lg overflow-hidden mb-4">
+                            <button onclick="toggleAccordion(this)" class="w-full flex items-center justify-between p-3 bg-slate-50 hover:bg-slate-100/80 text-left text-xs font-semibold text-slate-700 transition-colors">
+                                <span>Ver pasos del procedimiento</span>
+                                <i data-lucide="chevron-down" class="h-4 w-4 transform transition-transform duration-200"></i>
+                            </button>
+                            <div class="accordion-content bg-white px-4">
+                                <ol class="list-decimal list-inside text-xs text-slate-600 space-y-2 py-3 border-t border-slate-100">
+                                    <li>Ir a 'Administración del sitio' > 'Usuarios' > 'Subir usuarios'.</li>
+                                    <li>Preparar un archivo CSV con los datos de los estudiantes (nombre, usuario, email).</li>
+                                    <li>Seleccionar el aula destino y la categoría correspondiente para la inscripción.</li>
+                                    <li>Subir el archivo, revisar las previsualizaciones y confirmar la carga masiva.</li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+                    <a href="https://drive.google.com/file/d/19ClxiMJ9EoOum2FbAwoyOQcwVVIWLfgx/view?usp=sharing" target="_blank" class="w-full flex items-center justify-center gap-2 bg-orange-500 hover:bg-orange-600 text-white font-semibold text-xs py-2.5 px-4 rounded-lg shadow-sm transition-colors mt-auto">
                         <i data-lucide="play-circle" class="h-4 w-4"></i> Ver video tutorial
                     </a>
                 </article>
