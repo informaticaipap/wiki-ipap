@@ -26,6 +26,7 @@ Wiki interna del Instituto Provincial de la Administración Pública (IPAP) de R
 8. Manuales (2 enlaces externos)
 
 ## Historial de cambios
+- SIU: categoría independiente con el artículo "Creación período académico" y su video tutorial en Drive
 - Moodle: agregada categoría con 4 procedimientos y videos
 - Header: rediseñado a fondo blanco con logo visible + separador
 - Manuales: categoría en sidebar con enlaces a Moodle docs y SIU wiki
